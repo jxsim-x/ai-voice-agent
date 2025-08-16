@@ -1,0 +1,179 @@
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0f0f0f;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Keep container same alignment and padding as before */
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .title {
+      text-align: center;
+      font-size: 32px;
+      color: #00ffc8;
+      margin-bottom: 0.5rem;
+      animation: pulse 2s infinite;
+      text-shadow: 0 0 10px #00ffc8, 0 0 20px #00ffc8, 0 0 40px #00ffc8;
+    }
+
+    .accent-bar {
+      width: 120px;
+      height: 4px;
+      background: linear-gradient(90deg, #00ffc8, #007c7c, #00ffc8);
+      margin: 0 auto 24px auto;
+      border-radius: 2px;
+      animation: moveBar 3s linear infinite;
+    }
+
+    @keyframes moveBar {
+      0% { background-position: 0 0; }
+      100% { background-position: 120px 0; }
+    }
+
+    .tagline {
+      text-align: center;
+      font-size: 16px;
+      color: #bbb;
+      margin-bottom: 30px;
+    }
+
+    .card, #echo-section {
+      background: rgba(30, 30, 30, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(0,255,200, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0,255,200,0.2);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    textarea {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      resize: none;
+      margin-bottom: 1rem;
+      background: #151515;
+      color: #e0f7fa;
+    }
+
+    textarea:focus, input:focus {
+      outline: none;
+      border: 2px solid #00ffc8;
+      box-shadow: 0 0 8px #00ffc8;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-top: 12px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(45deg, #00ffc8, #007c7c);
+      color: #000;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: linear-gradient(45deg, #00ffe7, #00b5ad);
+      box-shadow: 0 0 10px #00ffc8;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    audio {
+      margin-top: 1rem;
+      transition: filter 0.3s;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    audio:hover {
+      filter: drop-shadow(0px 0px 6px #00ffc8);
+    }
+
+    #echo-section h1 {
+      text-align: center;
+      color: #a6fffa;
+      text-shadow: 0 0 8px #00ffc8;
+      font-size: 28px;
+    }
+
+    #echo-section {
+      border: 1.5px dashed #007c7c;
+      background: rgba(20,30,30,0.7);
+      box-shadow: 0 8px 32px 0 rgba(0,255,200,0.15);
+    }
+
+    #echo-section button {
+      margin: 10px;
+      font-size: 16px;
+    }
+
+    #echo-status {
+      text-align: center;
+      font-style: italic;
+      color: #555;
+      margin-top: 10px;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      background: #222;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(45deg, #00ffc8, #007c7c);
+      border-radius: 8px;
+    }
+
+    footer {
+      margin-top: 3rem;
+      font-size: 0.8rem;
+      color: #555;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+      0% { color: #00ffc8; }
+      50% { color: #04f3e8; }
+      100% { color: #00ffc8; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+
+    /* Prevent audio overflow */
+     audio {
+   width: 100%;
+   max-width: 100%;
+   margin-top: 1rem;
+   }

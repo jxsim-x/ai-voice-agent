@@ -1,0 +1,30 @@
+# Environment variables
+.env
+*.env
+.env.local
+.env.production
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+backend/.venv/
+backend/venv/
+*.log
+voice_agent.log
+
+# Temporary files
+tmp/
+uploads/
+backend/tmp/
+backend/uploads/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jassim's AI Voice Generator</title>
+  <link rel="stylesheet" href="/style.css">
+
+  <!-- Optional: Google Font for professional look -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- 🗣️ TTS Section -->
+    <h1 class="title">🎙️ 30 DAYS OF MURF AI VOICE AGENTS </h1>
+    <h2 class="title">  DAY 12 " REVAMPING  THE UI "</h2>
+    <div class="accent-bar"></div>
+    <p class="tagline">by Muhammed Jassim Nisam</p>
+
+   <!-- <div class="card">
+      <textarea id="textInput" rows="4" placeholder="Type your message here..."></textarea>
+      <button id="generateBtn">Generate Speech</button>
+      <p id="statusMsg"></p>
+      <audio id="audioPlayer" controls style="display:none;"></audio>
+    </div>-->
+
+   <!-- 🎤 Echo Bot Section -->
+  <section id="echo-section">
+    <h1>🎤 LLM BOT — GEMINI 2.5 LLM - ASK ANYTHING YOU WANT </h1>
+    <div style="text-align: center;">
+      <!-- <button id="start-recording">🎙️ SPEAK TO THE LLM</button>
+      <button id="stop-recording" disabled>⏹️ STOP RECORDING</button>
+      <button id="send-to-llm" disabled>🚀 SEND TO YOUR LLM BUDDY </button>-->
+      <button id="record-toggle-btn">🎙️ Start Recording</button>
+      <!--<audio id="echo-audio" controls></audio>
+      <p id="echo-status"></p>-->
+
+      <!-- Response Audio 
+      <audio id="llm-response-audio" controls style="display:none; margin-top: 10px;"></audio> -->
+      <!-- Keep audio element hidden -->
+      <audio id="llm-response-audio" style="display: none;"></audio>
+
+
+      <!-- Response Text -->
+      <textarea id="llm-response-text" rows="4" readonly 
+        placeholder="LLM Response will appear here..."
+        style="width: 90%; margin-top: 10px; font-size: 1rem; line-height: 1.4;"></textarea>
+        <div id="echo-status"></div>
+
+    </div>
+  </section>
+
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
+

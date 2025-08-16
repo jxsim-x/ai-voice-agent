@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jassim's AI Voice Generator</title>
+  <link rel="stylesheet" href="/static/style.css">
+
+  <!-- Optional: Google Font for professional look -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+  
+<body>
+  <div class="container">
+    <!-- 🗣️ TTS Section -->
+    <h1 class="title">🎙️ Voice Generator</h1>
+    <div class="accent-bar"></div>
+    <p class="tagline">by Muhammed Jassim Nisam</p>
+
+    <div class="card">
+      <textarea id="textInput" rows="4" placeholder="Type your message here..."></textarea>
+      <button id="generateBtn">Generate Speech</button>
+      <p id="statusMsg"></p>
+      <audio id="audioPlayer" controls style="display:none;"></audio>
+    </div>
+
+   <!-- 🎤 Echo Bot Section -->
+  <section id="echo-section">
+    <h1>🎤 ECHO BOT 3.0 — Voice to LLM + Murf</h1>
+    <div style="text-align: center;">
+      <button id="start-recording">🎙️ Start Recording</button>
+      <button id="stop-recording" disabled>⏹️ Stop Recording</button>
+      <button id="send-to-llm" disabled>🚀 Send to Workflow</button>
+
+      <audio id="echo-audio" controls></audio>
+      <p id="echo-status"></p>
+
+      <!-- Response Audio -->
+      <audio id="llm-response-audio" controls style="display:none; margin-top: 10px;"></audio>
+
+      <!-- Response Text -->
+      <textarea id="llm-response-text" rows="4" readonly 
+        placeholder="LLM Response will appear here..."
+        style="width: 80%; margin-top: 10px;"></textarea>
+    </div>
+  </section>
+
+
+</div>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
+
