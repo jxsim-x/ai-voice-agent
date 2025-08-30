@@ -17,3 +17,6 @@ pydub>=0.25.1
 
 # Additional dependencies
 python-dotenv>=1.0.0
+
+gunicorn>=21.2.0
+python-multipart>=0.0.6

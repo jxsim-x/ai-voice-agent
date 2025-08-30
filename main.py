@@ -82,6 +82,10 @@ load_dotenv()
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# PRODUCTION: Get port from environment (Render sets this automatically)
+PORT = int(os.getenv("PORT", 8000))
+
+
 # ---- Initialize Services ----
 try:
     stt_service = STTService(os.getenv("ASSEMBLYAI_API_KEY"))
@@ -103,7 +107,11 @@ except Exception as e:
 
 
 # ---- FastAPI App Setup ----
-app = FastAPI(title="Voice Agent API", version="1.0.0")
+app = FastAPI(
+    title="Zody Voice Agent API", 
+    version="1.0.0",
+    description="30 Days of AI Voice Agents - Zody Deployment"
+)
 
 app.add_middleware(
     CORSMiddleware,
@@ -112,6 +120,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Health check endpoint for Render
+@app.get("/health")
+async def health_check():
+    return {"status": "healthy", "service": "Zody Voice Agent"}
+
+# Root endpoint
+@app.get("/")
+async def root():
+    return {"message": "Zody Voice Agent is running!", "status": "active"}
 
 # 🎵 NEW: Day 20 - Startup event to connect Murf WebSocket
 @app.on_event("startup")
@@ -1163,4 +1180,4 @@ app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)

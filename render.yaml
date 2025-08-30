@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: zody-voice-agent
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: WEATHER_API_KEY  
+        sync: false
+      - key: MURF_API_KEY
+        sync: false
+      - key: ASSEMBLYAI_API_KEY
+        sync: false
+    healthCheckPath: /
