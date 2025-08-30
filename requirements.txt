@@ -1,0 +1,19 @@
+# Existing dependencies
+fastapi>=0.111
+uvicorn[standard]>=0.30
+google-generativeai>=0.6
+requests>=2.31
+pydantic>=2.7
+pydantic-settings>=2.2
+
+# FIXED: AssemblyAI with RealtimeTranscriber support
+assemblyai>=0.34.0
+
+# Audio processing dependencies
+pydub>=0.25.1
+
+# REMOVED: websockets (no longer needed as SDK handles it)
+ websockets>=12.0
+
+# Additional dependencies
+python-dotenv>=1.0.0

@@ -1,0 +1,32 @@
+﻿# Environment files (API keys)
+.env
+.env.local
+*.env
+
+# Virtual environment
+venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+logs/
+
+# Audio files
+*.mp3
+*.wav
+*.webm
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/

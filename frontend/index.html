@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ZODY - your ai companion robot </title>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* === Global Styles === */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f5f2e9;
+      background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+      background-repeat: repeat;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 28px;
+      color: #d4a017;
+      text-shadow: 0 2px 6px rgba(212, 160, 23, 0.2);
+      margin-bottom: 0.5rem;
+    }
+
+    .accent-bar {
+      width: 140px;
+      height: 4px;
+      background: linear-gradient(90deg, #d4a017, #f6e27f, #d4a017);
+      margin: 0 auto 24px auto;
+      border-radius: 2px;
+      animation: moveBar 3s linear infinite;
+    }
+
+    @keyframes moveBar {
+      0% { background-position: 0 0; }
+      100% { background-position: 140px 0; }
+    }
+
+    .tagline {
+      font-size: 16px;
+      color: #7a6c52;
+      margin-bottom: 30px;
+    }
+
+    /* Main conversation button */
+    .conversation-button {
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      border: none;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 20px auto;
+      display: block;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    .btn-idle {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+    }
+
+    .btn-listening {
+      background: linear-gradient(135deg, #FF6B6B, #ee5a52);
+      animation: pulse 1.5s infinite;
+    }
+
+    .btn-processing {
+      background: linear-gradient(135deg, #FFD93D, #ffcd02);
+      color: #333;
+    }
+
+    .btn-speaking {
+      background: linear-gradient(135deg, #6C5CE7, #5f3dc4);
+      animation: speaker-pulse 1s infinite;
+    }
+
+    .btn-ending {
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.7); }
+      70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(255, 107, 107, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
+    }
+
+    @keyframes speaker-pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    /* Status display */
+    .status-display {
+      text-align: center;
+      font-size: 18px;
+      color: #7a6c52;
+      margin: 20px 0;
+      padding: 15px;
+      background: rgba(212, 160, 23, 0.1);
+      border-radius: 12px;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Chat history */
+    .chat-history {
+      background: rgba(255, 255, 255, 0.95);
+      border: 2px solid rgba(212, 160, 23, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 30px 0;
+      text-align: left;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .chat-header {
+      text-align: center;
+      color: #d4a017;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+
+    .message {
+      margin: 15px 0;
+      padding: 12px 16px;
+      border-radius: 18px;
+      max-width: 80%;
+      line-height: 1.4;
+    }
+
+    .user-message {
+      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+      margin-left: auto;
+      text-align: right;
+      border-bottom-right-radius: 4px;
+    }
+
+    .ai-message {
+      background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-label {
+      font-size: 12px;
+      font-weight: bold;
+      color: #666;
+      margin-bottom: 4px;
+    }
+
+    .message-text {
+      font-size: 16px;
+    }
+
+    /* Live transcription display */
+    .live-transcript {
+      background: rgba(255, 255, 255, 0.9);
+      border: 2px dashed rgba(212, 160, 23, 0.5);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 20px 0;
+      text-align: left;
+      min-height: 60px;
+      display: none;
+    }
+
+    .live-transcript.active {
+      display: block;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .transcript-label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #d4a017;
+      margin-bottom: 8px;
+    }
+
+    .transcript-text {
+      font-size: 16px;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      color: #999;
+      font-style: italic;
+      margin: 40px 0;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f0ede4;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d4a017;
+      border-radius: 4px;
+    }
+
+    .conversation-button:hover {
+      transform: scale(1.05);
+    }
+
+    .conversation-button:active {
+      transform: scale(0.95);
+    }
+
+/* Button Container */
+.button-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin: 20px 0;
+}
+
+/* Settings Button */
+.settings-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #d4a017, #f6e27f);
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(212, 160, 23, 0.3);
+}
+
+.settings-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(212, 160, 23, 0.5);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-overlay.active {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Modal Content */
+.modal-content {
+  background: #f5f2e9;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Modal Header */
+.modal-header {
+  background: linear-gradient(135deg, #d4a017, #f6e27f);
+  color: white;
+  padding: 20px;
+  border-radius: 16px 16px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 30px;
+}
+
+.modal-description {
+  text-align: center;
+  color: #7a6c52;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.api-key-group {
+  margin-bottom: 20px;
+}
+
+.api-key-group label {
+  display: block;
+  font-weight: bold;
+  color: #d4a017;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.api-key-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid rgba(212, 160, 23, 0.3);
+  border-radius: 8px;
+  background: white;
+  font-size: 14px;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+.api-key-group input:focus {
+  outline: none;
+  border-color: #d4a017;
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.1);
+}
+
+.api-key-group input::placeholder {
+  color: #999;
+}
+
+/* Modal Footer */
+.modal-footer {
+  padding: 20px 30px;
+  border-top: 1px solid rgba(212, 160, 23, 0.2);
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.save-btn, .clear-btn, .cancel-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.save-btn {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.clear-btn {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: white;
+}
+
+.clear-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.3);
+}
+
+.cancel-btn {
+  background: linear-gradient(135deg, #f44336, #d32f2f);
+  color: white;
+}
+
+.cancel-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <h1 class="title">🎙️ 30 DAYS OF AI VOICE AGENTS</h1>
+    <h2 class="title"> ZODY -- YOUR CHEERFUL AI ROBOT COMPANION</h2>
+    <div class="accent-bar"></div>
+    <p class="tagline">by Muhammed Jassim Nisam</p>
+
+        <!-- Main Conversation Interface -->
+    <!-- Main Conversation Interface -->
+    <div style="text-align: center;">
+      <!-- Button Container -->
+      <div class="button-container">
+        <!-- Main Conversation Button -->
+        <button id="conversation-btn" class="conversation-button btn-idle">
+          🎙️ Start Conversation
+        </button>
+        
+        <!-- Settings Button -->
+        <button id="settings-btn" class="settings-button" title="Configure API Keys">
+          ⚙️
+        </button>
+      </div>
+
+      <!-- Status Display -->
+      <div id="status-display" class="status-display">
+        Ready to start your conversation with AI...
+      </div>
+
+      <!-- Live Transcription Display -->
+      <div id="live-transcript" class="live-transcript">
+        <div class="transcript-label">🎯 You're saying:</div>
+        <div id="transcript-text" class="transcript-text">
+          Listening...
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat History -->
+    <div class="chat-history">
+      <div class="chat-header">💬 Conversation History</div>
+      <div id="chat-messages">
+        <div class="empty-state">
+          Your conversation will appear here...
+        </div>
+      </div>
+    </div>
+
+    <!-- Instructions -->
+    <div style="background: rgba(255, 255, 255, 0.1); border-radius: 10px; padding: 20px; margin: 20px 0; text-align: left;">
+      <h3 style="color: #d4a017; text-align: center; margin-top: 0;">📋 How to Use:</h3>
+      <ol style="color: #7a6c52; font-weight: bold; line-height: 1.6;">
+        <li>Click <strong>"Start Conversation"</strong> to begin</li>
+        <li>Allow microphone access when prompted</li>
+        <li>Speak your question or message</li>
+        <li>Wait for the AI to respond with voice + text</li>
+        <li>Continue the conversation naturally</li>
+        <li>Click the button again to end the conversation</li>
+      </ol>
+    </div>
+  </div>
+  <!-- API Configuration Modal -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>🔧 API Configuration</h3>
+        <button id="close-modal" class="close-btn">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <p class="modal-description">
+          Enter your API keys below. If left empty, default keys will be used.
+          <br><small>🔒 Keys are stored temporarily and deleted when you close the browser.</small>
+        </p>
+        
+        <div class="api-key-group">
+          <label for="gemini-key">🤖 Gemini API Key:</label>
+          <input type="password" id="gemini-key" placeholder="Enter your Gemini API key (optional)">
+        </div>
+        
+        <div class="api-key-group">
+          <label for="weather-key">🌤️ Visual Crossing Weather Key:</label>
+          <input type="password" id="weather-key" placeholder="Enter your Visual Crossing API key (optional)">
+        </div>
+        
+        <div class="api-key-group">
+          <label for="murf-key">🎵 Murf API Key:</label>
+          <input type="password" id="murf-key" placeholder="Enter your Murf API key (optional)">
+        </div>
+        
+        <div class="api-key-group">
+          <label for="assemblyai-key">🎤 AssemblyAI Key:</label>
+          <input type="password" id="assemblyai-key" placeholder="Enter your AssemblyAI API key (optional)">
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button id="save-keys" class="save-btn">💾 Save Keys</button>
+        <button id="clear-keys" class="clear-btn">🗑️ Clear All</button>
+        <button id="cancel-modal" class="cancel-btn">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
