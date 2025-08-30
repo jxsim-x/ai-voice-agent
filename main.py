@@ -122,12 +122,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 # ===== Serve Frontend Files =====
-frontend_dir = os.path.join(os.path.dirname(__file__), "../frontend")
+frontend_dir = os.path.join(os.path.dirname(__file__), "frontend")
+frontend_dir = os.path.abspath(frontend_dir)
 
-# Mount static files (JS, CSS, images)
+if not os.path.exists(frontend_dir):
+    raise RuntimeError(f"Frontend directory not found: {frontend_dir}")
+
 app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
-
 # Serve index.html at root
+
 @app.get("/")
 async def serve_index():
     return FileResponse(os.path.join(frontend_dir, "index.html"))
