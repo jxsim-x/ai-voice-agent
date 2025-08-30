@@ -1,4 +1,5 @@
 import uuid 
+
 import os
 import sys
 import time
@@ -31,6 +32,7 @@ from schemas.responses import (
 )
 from utils.logging_config import setup_logging
 from utils.cleanup import cleanup_files
+from fastapi.responses import FileResponse
 
 # CRITICAL FIX: Force UTF-8 encoding for Windows console
 if sys.platform == "win32":
@@ -119,6 +121,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+# ===== Serve Frontend Files =====
+frontend_dir = os.path.join(os.path.dirname(__file__), "../frontend")
+
+# Mount static files (JS, CSS, images)
+app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+
+# Serve index.html at root
+@app.get("/")
+async def serve_index():
+    return FileResponse(os.path.join(frontend_dir, "index.html"))
 
 # Health check endpoint for Render
 @app.get("/health")
@@ -126,9 +138,9 @@ async def health_check():
     return {"status": "healthy", "service": "Zody Voice Agent"}
 
 # Root endpoint
-@app.get("/")
-async def root():
-    return {"message": "Zody Voice Agent is running!", "status": "active"}
+#@app.get("/")
+#async def root():
+ #   return {"message": "Zody Voice Agent is running!", "status": "active"}
 
 # 🎵 NEW: Day 20 - Startup event to connect Murf WebSocket
 @app.on_event("startup")
