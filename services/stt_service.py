@@ -115,7 +115,7 @@ class StreamingTranscriptionManager:
         logger.info(make_log_safe("🎤 StreamingTranscriptionManager initialized (Streaming V3 API + Murf)"))
     
     async def create_session(self, session_id: str, websocket: WebSocket, sample_rate: int = 16000, 
-                           enable_turn_detection: bool = True, **kwargs) -> bool:
+                           enable_turn_detection: bool = True, conversation_session_id: str = None, **kwargs) -> bool:
         """
         Create a new streaming transcription session using V3 API
         FIXED: Now accepts enable_turn_detection parameter without breaking
@@ -129,7 +129,8 @@ class StreamingTranscriptionManager:
                 manager=self,
                 enable_turn_detection=enable_turn_detection,
                 llm_service=self.llm_service,
-                murf_service=self.murf_service  # 🎵 NEW: Pass Murf service
+                murf_service=self.murf_service,  # 🎵 NEW: Pass Murf service
+                conversation_session_id=conversation_session_id
             )
             
             success = await session.start()
@@ -167,13 +168,12 @@ class StreamingTranscriptionManager:
             logger.warning(f"Session not found for cleanup: {session_id}")
 
 class NewStreamingSession:
-    """
-    REVERTED TO YOUR ORIGINAL WORKING CODE + proper turn detection support
-    """
+
     
     def __init__(self, session_id: str, websocket: WebSocket, api_key: str, 
                  sample_rate: int, manager: StreamingTranscriptionManager,
-                 enable_turn_detection: bool = True, llm_service: 'LLMService' = None, murf_service=None):
+                 enable_turn_detection: bool = True, llm_service: 'LLMService' = None, 
+                 murf_service=None, conversation_session_id: str = None):
         self.session_id = session_id
         self.websocket = websocket
         self.api_key = api_key
@@ -181,7 +181,8 @@ class NewStreamingSession:
         self.manager = manager
         self.enable_turn_detection = enable_turn_detection
         self.llm_service = llm_service 
-        self.murf_service = murf_service  # 🎵 NEW: Store Murf service
+        self.murf_service = murf_service
+        self.conversation_session_id = conversation_session_id 
 
         # Streaming components (EXACT same as your working code)
         self.streaming_client = None
@@ -405,12 +406,23 @@ class NewStreamingSession:
             logger.info(make_log_safe(f"⚡ Triggering LLM streaming for: {transcript[:50]}..."))
             
             # Call the LLM service to process and stream the response
+            # Call the LLM service to process and stream the response WITH MEMORY
             if self.llm_service:
-                complete_response = await self.llm_service.process_transcript_and_stream_to_client(
-                    transcript, 
-                    self.murf_service, 
-                    self.websocket  # 🔥 NEW: Pass client WebSocket for audio forwarding
-                )
+                if self.conversation_session_id:
+                    # NEW: Use memory-aware processing
+                    complete_response = await self.llm_service.process_transcript_with_memory_and_stream(
+                        transcript, 
+                        self.conversation_session_id,
+                        self.murf_service, 
+                        self.websocket
+                    )
+                else:
+                    # Fallback to original method if no session ID
+                    complete_response = await self.llm_service.process_transcript_and_stream_to_client(
+                        transcript, 
+                        self.murf_service, 
+                        self.websocket
+                    )
                 # Optional: Send the complete response back to WebSocket for UI
                 await self._send_websocket_message({
                     "type": "llm_response_complete",

@@ -748,10 +748,11 @@ async def handle_audio_chunk(session_id: str, audio_data: bytes, websocket: WebS
 @app.websocket("/ws/llm-stream")
 async def llm_stream_endpoint(websocket: WebSocket):
     """
-    FIXED: Complete Voice Agent WebSocket with STT + Turn Detection + LLM + TTS
+    FIXED: Complete Voice Agent WebSocket with STT + Turn Detection + LLM + TTS + MEMORY
     """
     await manager.connect(websocket)
-    transcription_session_id = None  # NEW: Track transcription session
+    transcription_session_id = None  # Track transcription session
+    conversation_session_id = None  # NEW: Track conversation session for memory
     
     try:
         # Welcome message
@@ -786,12 +787,21 @@ async def llm_stream_endpoint(websocket: WebSocket):
                     if transcription_session_id is None:
                         transcription_session_id = uuid.uuid4().hex
                         
-                        # Create STT session with turn detection enabled
+                        # NEW: Generate conversation session ID for memory
+                        conversation_session_id = f"voice_session_{int(time.time())}_{random.randint(1000, 9999)}"
+                        logger.info(f"Generated conversation session ID: {conversation_session_id}")
+                        
+                        # Initialize conversation history for this session
+                        if conversation_session_id not in chat_histories:
+                            chat_histories[conversation_session_id] = []
+                            logger.info(f"Initialized chat history for session: {conversation_session_id}")
+                        
                         success = await streaming_manager.create_session(
                             session_id=transcription_session_id, 
                             websocket=websocket, 
                             sample_rate=16000,
-                            enable_turn_detection=True  # KEY: Enable turn detection
+                            enable_turn_detection=True,  # KEY: Enable turn detection
+                            conversation_session_id=conversation_session_id  # NEW: Pass conversation session
                         )
                         
                         if success:
