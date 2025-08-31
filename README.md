@@ -27,9 +27,23 @@ It also comes with smart skills like **Weather Forecasting** powered by **Visual
 ## 🌍 Demo & Deployment  
 - **Hosted App** → [Zody on Render](https://zody-voice-agent.onrender.com)  
 
-📸 **Screenshots & Proofs** (place your files here later):  
-- ![UI Screenshot](docs/images/ui.png) *(Premium beige theme with golden text ✨)*  
-- ![Conversation Demo GIF](docs/images/demo.gif)   
+## 🖥️ **User Interface Screenshots**
+
+### **Starting Zody**
+![Start Zody](docs/images/start%20zody.png)
+*Clean interface ready for voice interaction*
+
+### **API Integration**
+![API Integration](docs/images/user%20api%20integration.png)
+*Easy API key configuration for personalized experience*
+
+### **Real-time Messages**
+![Real-time Chat](docs/images/messages.png)
+*Live conversation with instant transcription and responses*
+
+### **End Recording**
+![End Recording](docs/images/end%20recording.png)
+*Conversation complete with full transcript and audio playback*
 
 ---
 
@@ -47,6 +61,10 @@ It also comes with smart skills like **Weather Forecasting** powered by **Visual
 **Utilities**: python-dotenv, logging, cleanup scripts  
 
 ---
+## 🏗️ **System Architecture**
+![Zody Architecture](docs/images/🎤%20Voice%20Input.png)
+*Voice input flows through AssemblyAI → Gemini 2.5 Flash → Murf AI for seamless conversation*
+
 
 ## ⚙️ Installation / Setup (Local Development)  
 
@@ -197,9 +215,4 @@ I could engineer an AI companion robot that listens, understands, and responds n
 - **GitHub** → [github.com/jxsim-x](https://github.com/jxsim-x)
 - **📧 Email** → jasimnisam123@gmail.com
 
----
 
-## 📜 License
-
-This project is licensed under the **MIT License**.  
-Feel free to fork, modify, and build upon Zody 🎉
