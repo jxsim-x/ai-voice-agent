@@ -29,8 +29,7 @@ It also comes with smart skills like **Weather Forecasting** powered by **Visual
 
 📸 **Screenshots & Proofs** (place your files here later):  
 - ![UI Screenshot](docs/images/ui.png) *(Premium beige theme with golden text ✨)*  
-- ![Conversation Demo GIF](docs/images/demo.gif)  
-- 🎥 **Video Proof**: [Watch on YouTube](#) *(replace `#` with your link)*  
+- ![Conversation Demo GIF](docs/images/demo.gif)   
 
 ---
 
@@ -79,15 +78,15 @@ uvicorn main:app --reload
 
 ## 🚀 Core Features
 
-- 🎤 **Real-time Voice Input** – One-click recording
-- 🕒 **Turn Detection** – Knows when you're done speaking
-- 🗣️ **Speech-to-Text (STT)** – AssemblyAI Realtime API
-- 🤖 **LLM-powered Replies** – Gemini 2.5 Flash
-- 🎵 **Text-to-Speech (TTS)** – Murf AI natural voices
-- ⚡ **Low-latency Audio Streaming** – Hear while it's generating
-- 💬 **Dual Output** – Voice + Text
-- 🌤️ **Weather Forecasting** – Visual Crossing API
-- 🔄 **Continuous Conversation** – Auto-start mic after each reply
+| 🎤 **Voice Input** | 🧠 **AI Processing** | 🎵 **Natural TTS** |
+|:---:|:---:|:---:|
+| One-click recording | Gemini 2.5 Flash | Murf AI voices |
+| Turn detection | Conversational AI | Streaming playback |
+
+| 🌤️ **Weather API** | ⚡ **Real-time** | 💬 **Memory Chat** |
+|:---:|:---:|:---:|
+| Visual Crossing | Low latency | Session memory |
+| Live forecasts | WebSocket streaming | Continuous talk |
 
 ---
 
