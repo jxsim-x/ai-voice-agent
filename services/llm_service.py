@@ -381,79 +381,79 @@ User: {transcript}
         except Exception as e:
             logger.error(f"Error getting LLM response with history: {e}")
             return "I apologize, I'm having trouble processing your request right now."   
-        async def process_transcript_with_memory_and_stream(
-            self, 
-            user_transcript: str, 
-            conversation_session_id: str, 
-            murf_service=None, 
-            client_websocket=None
-        ) -> str:
-            """
-            NEW: Process transcript using conversation history for context + stream audio response
-            This gives Zody memory of previous conversations!
-            """
-            try:
-                logger.info(f"Processing transcript with memory for session: {conversation_session_id}")
-                logger.info(f"User transcript: {user_transcript}")
-                
-                # Import chat_histories from main module
-                import __main__
-                if hasattr(__main__, 'chat_histories'):
-                    chat_histories = __main__.chat_histories
-                else:
-                    # Fallback: create empty history
-                    chat_histories = {}
-                    logger.warning("chat_histories not found in main, using empty history")
-                
-                # Get or create conversation history for this session
-                conversation_history = chat_histories.get(conversation_session_id, [])
-                logger.info(f"Retrieved conversation history: {len(conversation_history)} messages")
-                
-                # Add current user message to history
-                conversation_history.append({
-                    "role": "user",
-                    "content": user_transcript
-                })
-                
-                # Build conversation context prompt
-                conversation_prompt = f"{ZODY_PERSONA}\n\n"
-                
-                # Add conversation history to prompt
-                if len(conversation_history) > 1:  # More than just current message
-                    conversation_prompt += "Previous conversation:\n"
-                    for msg in conversation_history[:-1]:  # All except current message
-                        role = msg.get("role", "user").capitalize()
-                        content = msg.get("content", "")
-                        conversation_prompt += f"{role}: {content}\n"
-                    conversation_prompt += "\n"
-                
-                # Add current user message
-                conversation_prompt += f"User: {user_transcript}\nAssistant:"
-                
-                logger.info(f"Generated conversation prompt with {len(conversation_history)} messages")
-                
-                # Generate streaming response using conversation context
-                assistant_response = await self.generate_streaming_response(
-                    conversation_prompt, 
-                    murf_service, 
-                    client_websocket
-                )
-                
-                # Add assistant response to conversation history
-                conversation_history.append({
-                    "role": "assistant", 
-                    "content": assistant_response
-                })
-                
-                # Update chat_histories with the new conversation
-                chat_histories[conversation_session_id] = conversation_history
-                logger.info(f"Updated conversation history: {len(conversation_history)} total messages")
-                
-                return assistant_response
-                
-            except Exception as e:
-                logger.error(f"Error in process_transcript_with_memory_and_stream: {e}")
-                # Fallback to regular processing
-                return await self.process_transcript_and_stream_to_client(
-                    user_transcript, murf_service, client_websocket
-                )          
+    async def process_transcript_with_memory_and_stream(
+        self, 
+        user_transcript: str, 
+        conversation_session_id: str, 
+        murf_service=None, 
+        client_websocket=None
+    ) -> str:
+        """
+        NEW: Process transcript using conversation history for context + stream audio response
+        This gives Zody memory of previous conversations!
+        """
+        try:
+            logger.info(f"Processing transcript with memory for session: {conversation_session_id}")
+            logger.info(f"User transcript: {user_transcript}")
+            
+            # Import chat_histories from main module
+            import __main__
+            if hasattr(__main__, 'chat_histories'):
+                chat_histories = __main__.chat_histories
+            else:
+                # Fallback: create empty history
+                chat_histories = {}
+                logger.warning("chat_histories not found in main, using empty history")
+            
+            # Get or create conversation history for this session
+            conversation_history = chat_histories.get(conversation_session_id, [])
+            logger.info(f"Retrieved conversation history: {len(conversation_history)} messages")
+            
+            # Add current user message to history
+            conversation_history.append({
+                "role": "user",
+                "content": user_transcript
+            })
+            
+            # Build conversation context prompt
+            conversation_prompt = f"{ZODY_PERSONA}\n\n"
+            
+            # Add conversation history to prompt
+            if len(conversation_history) > 1:  # More than just current message
+                conversation_prompt += "Previous conversation:\n"
+                for msg in conversation_history[:-1]:  # All except current message
+                    role = msg.get("role", "user").capitalize()
+                    content = msg.get("content", "")
+                    conversation_prompt += f"{role}: {content}\n"
+                conversation_prompt += "\n"
+            
+            # Add current user message
+            conversation_prompt += f"User: {user_transcript}\nAssistant:"
+            
+            logger.info(f"Generated conversation prompt with {len(conversation_history)} messages")
+            
+            # Generate streaming response using conversation context
+            assistant_response = await self.generate_streaming_response(
+                conversation_prompt, 
+                murf_service, 
+                client_websocket
+            )
+            
+            # Add assistant response to conversation history
+            conversation_history.append({
+                "role": "assistant", 
+                "content": assistant_response
+            })
+            
+            # Update chat_histories with the new conversation
+            chat_histories[conversation_session_id] = conversation_history
+            logger.info(f"Updated conversation history: {len(conversation_history)} total messages")
+            
+            return assistant_response
+            
+        except Exception as e:
+            logger.error(f"Error in process_transcript_with_memory_and_stream: {e}")
+            # Fallback to regular processing
+            return await self.process_transcript_and_stream_to_client(
+                user_transcript, murf_service, client_websocket
+            )          

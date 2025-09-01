@@ -787,14 +787,17 @@ async def llm_stream_endpoint(websocket: WebSocket):
                     if transcription_session_id is None:
                         transcription_session_id = uuid.uuid4().hex
                         
-                        # NEW: Generate conversation session ID for memory
-                        conversation_session_id = f"voice_session_{int(time.time())}_{random.randint(1000, 9999)}"
-                        logger.info(f"Generated conversation session ID: {conversation_session_id}")
-                        
-                        # Initialize conversation history for this session
-                        if conversation_session_id not in chat_histories:
-                            chat_histories[conversation_session_id] = []
-                            logger.info(f"Initialized chat history for session: {conversation_session_id}")
+                        # FIXED: Generate conversation session ID only ONCE per WebSocket connection
+                        if conversation_session_id is None:
+                            conversation_session_id = f"voice_session_{int(time.time())}_{random.randint(1000, 9999)}"
+                            logger.info(f" CREATED NEW conversation session: {conversation_session_id}")
+                        else:
+                            logger.info(f" REUSING conversation session: {conversation_session_id}")                           
+                            # Initialize conversation history for this session
+                            if conversation_session_id not in chat_histories:
+                                chat_histories[conversation_session_id] = []
+                                logger.info(f"Initialized chat history for session: {conversation_session_id}")
+
                         
                         success = await streaming_manager.create_session(
                             session_id=transcription_session_id, 
@@ -803,7 +806,7 @@ async def llm_stream_endpoint(websocket: WebSocket):
                             enable_turn_detection=True,  # KEY: Enable turn detection
                             conversation_session_id=conversation_session_id  # NEW: Pass conversation session
                         )
-                        
+
                         if success:
                             manager.transcription_sessions[websocket] = transcription_session_id
                             logger.info(f"[SUCCESS] Started STT session with turn detection: {transcription_session_id[:8]}")

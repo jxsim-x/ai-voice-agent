@@ -2,7 +2,7 @@
 console.log("✅ Complete Voice Agent loaded");
 // ===== Backend URL Configuration =====
 // Use your Render backend in production, fallback to localhost in dev
-const BACKEND_URL = "https://zody-voice-agent.onrender.com";
+const BACKEND_URL = window.location.protocol === 'https:' ? "https://zody-voice-agent.onrender.com" : `${window.location.protocol}//${window.location.host}`;
 // ===== Session Setup =====
 let params = new URLSearchParams(window.location.search);
 if (!params.has("session_id")) {
@@ -267,8 +267,10 @@ async function startConversation() {
 async function connectToLLMWebSocket() {
     console.log("🔌 Connecting to LLM WebSocket...");
     
+    
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `wss://zody-voice-agent.onrender.com/ws/llm-stream`;
+    const host = window.location.protocol === 'https:' ? 'zody-voice-agent.onrender.com' : window.location.host;
+    const wsUrl = `${protocol}//${host}/ws/llm-stream`;
     console.log("🔌 WebSocket URL:", wsUrl);
     
     websocket = new WebSocket(wsUrl);
