@@ -5,8 +5,7 @@
 ![Challenge](https://img.shields.io/badge/30Days-Voice%20Agents-orange)  
 
 ---
-
-## 🗣️ Tagline  
+  
 **"Talk. Ask. Discover. Zody listens, understands, and speaks back in real-time."**
 
 ---
